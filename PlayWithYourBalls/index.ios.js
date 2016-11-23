@@ -29,7 +29,6 @@ const firebaseConfig = {
 };
 
 let app = Firebase.initializeApp(firebaseConfig);
-
 class PlayWithYourBalls extends Component {
   constructor(props) {
     super(props);
@@ -38,22 +37,25 @@ class PlayWithYourBalls extends Component {
       loaded: false
     };
   }
+
   componentWillMount() {
-    AsyncStorage.getItem('user_data'). then((user_data_json) => {
+    AsyncStorage.getItem('user_data').then((user_data_json) => {
       let user_data = JSON.parse(user_data_json);
-      let component = {component: Signup};
       if(user_data != null) {
-        app.authWithCustomToken(user_data.token, (error, authData) => {
-          if(error){
-            this.setState(component);
-          }else {
-            this.setState({component: Account});
-          }
-        });
-      }else{
-        this.setState(component);
-      }
-    });
+        // app.auth().createCustomToken(user_data.stsTokenManager.accessToken)
+        // app.auth().signInWithCustomToken(user_data.stsTokenManager.accessToken)
+          // .then((authData) => {
+            this.setState({component: Account})
+          // }).catch((err) => {
+            // console.log(err)
+          // })
+        }else{
+          this.setState({component: Signup});
+        }
+    }).catch((err) => {
+      this.setState({component: Signup})
+      console.log(err)
+    })
   }
 
   render(){

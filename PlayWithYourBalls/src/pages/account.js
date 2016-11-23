@@ -6,7 +6,7 @@ import {
 	Text,
 	View,
 	Image,
-	AsynceStorage
+	AsyncStorage
 } from 'react-native';
 
 import Button from '../components/button';
@@ -19,7 +19,7 @@ import styles from '../styles/common-styles.js';
 
 import Firebase from 'firebase';
 
-// let app = new Firebase(`${fbcreds.databaseURL}`);
+
 
 export default class account extends Component {
 	constructor(props) {
@@ -29,15 +29,43 @@ export default class account extends Component {
 		}
 	}
 
-	componentWillMount() {
-		AsynceStorage.getItem('user_data').then((user_data_json) => {
-			let user_data = JSON.parse(user_data_json);
-			this.setState({
-				user: user_data,
-				loaded: true
-			});
-		});
-	}
+	// componentWillMount() {
+	// 	AsyncStorage.getItem('user_data').then((user_data_json) => {
+	// 		let user_data = JSON.parse(user_data_json);
+	// 		this.setState({
+	// 			user: user_data,
+	// 			loaded: true
+	// 		});
+
+	// 	})
+	// }
+
+async componentWillMount() {
+try {
+  const value = await AsyncStorage.getItem('user_data');
+  if (value !== null){
+    // We have data!!
+    console.log(value);
+    // let user_data = JSON.parse(value);
+            this.setState({
+                user: value,
+                loaded: true
+            });
+  }
+} catch (error) {
+  console.log("storage err", error)
+} }
+
+// componentWillMount() {
+//         AsyncStorage.getItem('user_data', (data) => {
+//             this.setState({
+//                 user: data,
+//                 loaded: true
+//             });
+//         console.log(AsyncStorage.getAllKeys().then((stuff) => console.log(stuff)))
+//         })
+//     }
+
 
 	render(){
 		return (
@@ -48,11 +76,11 @@ export default class account extends Component {
 						this.state.user &&
 							<View style={styles.body}>
 								<View style={page_styles.email_container}>
-									<Text syle={page_styles.email_text}>{this.state.user.password.email}</Text>
-							</View>
+									<Text syle={page_styles.email_text}>{this.state.user.email}</Text>
+								</View>
 							<Image
 								style={styles.image}
-								source={{uri: this.state.user.password.profileImageURL}}
+
 							/>
 							<Button
 								text="Logout"
@@ -67,11 +95,12 @@ export default class account extends Component {
 	}
 
 		logout() {
-			AsynceStorage.removeItem('user_data').then(() => {
-				Firebase.unauth();
-				this.props.navigator.push({
-					component: Login
-				});
+			AsyncStorage.removeItem('user_data').then(() => {
+				Firebase.auth().signOut().then(() => {
+					this.props.navigator.push({
+						component: Login
+					});
+				})
 			});
 		}
 	}
