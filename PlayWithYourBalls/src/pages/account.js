@@ -29,26 +29,15 @@ export default class account extends Component {
 		}
 	}
 
-	// componentWillMount() {
-	// 	AsyncStorage.getItem('user_data').then((user_data_json) => {
-	// 		let user_data = JSON.parse(user_data_json);
-	// 		this.setState({
-	// 			user: user_data,
-	// 			loaded: true
-	// 		});
-
-	// 	})
-	// }
-
 async componentWillMount() {
 try {
   const value = await AsyncStorage.getItem('user_data');
   if (value !== null){
     // We have data!!
-    console.log(value);
-    // let user_data = JSON.parse(value);
+    let user_data = JSON.parse(value);
+    console.log(navigator);
             this.setState({
-                user: value,
+                user: user_data,
                 loaded: true
             });
   }
@@ -56,15 +45,6 @@ try {
   console.log("storage err", error)
 } }
 
-// componentWillMount() {
-//         AsyncStorage.getItem('user_data', (data) => {
-//             this.setState({
-//                 user: data,
-//                 loaded: true
-//             });
-//         console.log(AsyncStorage.getAllKeys().then((stuff) => console.log(stuff)))
-//         })
-//     }
 
 
 	render(){

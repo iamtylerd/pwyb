@@ -75,8 +75,6 @@ export default class login extends Component {
 		Firebase.auth()
 			.signInWithEmailAndPassword(email, password)
 				.then((user_data) => {
-					// let userData = JSON.parse(user_data_json);
-					// app.auth().createCustomToken(userData.stsTokenManager.accessToken)
 					this.setState({
 						loaded: true
 					});
