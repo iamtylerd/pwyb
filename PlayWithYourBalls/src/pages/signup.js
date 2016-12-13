@@ -15,8 +15,8 @@ import Login from './login';
 
 import Firebase from 'firebase';
 
-// let app = new Firebase(`${fbcreds.databaseURL}`);
 
+import {rootRef} from '../../index.ios.js';
 
 import styles from '../styles/common-styles.js';
 
@@ -26,9 +26,15 @@ export default class signup extends Component {
 		this.state = {
 			loaded: true,
 			email: '',
-			password: ''
+			password: '',
+			username: ''
 		};
 	}
+
+	componentWillMount() {
+
+	}
+
 	signup() {
 		this.setState({
 			loaded: false,
@@ -38,10 +44,15 @@ export default class signup extends Component {
 		Firebase.auth().createUserWithEmailAndPassword(
 			email, password)
 			.then((userData) => {
+				rootRef.ref('users/' + userData.uid).set({
+					username: this.state.username,
+					email: this.state.email,
+				})
 				alert("Your account was created!");
 				this.setState({
 					email: '',
 					password: '',
+					username: '',
 					loaded: true
 				});
 		});
@@ -58,6 +69,14 @@ export default class signup extends Component {
 				<Header text="Signup" loaded={this.state.loaded} />
 				<View style={styles.body}>
 					<TextInput
+						style={styles.textinput}
+						onChangeText={(text) => {
+
+							this.setState({username: text})}
+						}
+						value={this.state.username}
+					placeholder={"Username"}
+					/><TextInput
 						style={styles.textinput}
 						onChangeText={(text) => {
 							console.log(text)

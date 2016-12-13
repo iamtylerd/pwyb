@@ -33,7 +33,6 @@ export default class createWorkout extends Component {
   		if (value !== null){
     		// We have data!!
     		let user_data = JSON.parse(value);
-    		console.log(this.state.user);
             this.setState({
                 user: user_data,
                 loaded: true
@@ -44,6 +43,7 @@ export default class createWorkout extends Component {
 		} }
 
 		render(){
+			console.log(this.itemsRef)
 		return (
 			<View style={styles.container}>
 				<Header text="Create Workout" loaded={this.state.loaded} />
