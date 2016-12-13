@@ -14,6 +14,7 @@ import Header from '../components/header';
 import fbcreds from '../../fbcreds'
 
 import Login from './login';
+import CreateWorkout from './createWorkout';
 
 import styles from '../styles/common-styles.js';
 
@@ -35,7 +36,6 @@ try {
   if (value !== null){
     // We have data!!
     let user_data = JSON.parse(value);
-    console.log(navigator);
             this.setState({
                 user: user_data,
                 loaded: true
@@ -63,6 +63,11 @@ try {
 
 							/>
 							<Button
+								text="Log Workout"
+								onpress= {this.createWorkout.bind(this)}
+								button_styles={styles.primary_button}
+								button_text_styles={styles.primary_button_text} />
+							<Button
 								text="Logout"
 								onpress={this.logout.bind(this)}
 								button_styles={styles.primary_button}
@@ -83,7 +88,13 @@ try {
 				})
 			});
 		}
+		createWorkout() {
+			this.props.navigator.push({
+				component: CreateWorkout
+			})
+		}
 	}
+
 	const page_styles = StyleSheet.create({
 		email_container: {
 			padding: 20
