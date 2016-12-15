@@ -6,7 +6,9 @@ import {
 	Text,
 	View,
 	Image,
-	AsyncStorage
+	AsyncStorage,
+	Picker,
+	Item
 } from 'react-native';
 
 import Button from '../components/button';
@@ -27,7 +29,7 @@ export default class account extends Component {
 		super(props);
 		this.state = {
 			loaded: false,
-		}
+			}
 	}
 
 async componentWillMount() {
@@ -58,12 +60,15 @@ try {
 								<View style={page_styles.email_container}>
 									<Text syle={page_styles.email_text}>{this.state.user.email}</Text>
 								</View>
-							<Image
-								style={styles.image}
-
-							/>
+							 <Picker
+			            style={styles.picker}
+			            selectedValue={this.state.selected1}
+			            onValueChange={(exer) => console.log(exer)}>
+			            <Item label="hello" value="key0" />
+			            <Item label="world" value="key1" />
+          		</Picker>
 							<Button
-								text="Log Workout"
+								text="Create Exercise"
 								onpress= {this.createWorkout.bind(this)}
 								button_styles={styles.primary_button}
 								button_text_styles={styles.primary_button_text} />
@@ -101,5 +106,8 @@ try {
 		},
 		email_text: {
 			fontSize: 18
-		}
+		},
+		picker: {
+    width: 100,
+  },
 	})

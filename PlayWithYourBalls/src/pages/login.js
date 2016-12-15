@@ -86,6 +86,7 @@ export default class login extends Component {
 	}
 
 	goToSignup(){
+		console.log(this.props.navigator)
 		this.props.navigator.push({
 			compoent: Signup
 		});
