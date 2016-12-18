@@ -7,13 +7,13 @@ import {
 	View,
 	Image,
 	AsyncStorage,
-	Picker,
 	Item
 } from 'react-native';
 
 import Button from '../components/button';
 import Header from '../components/header';
-import fbcreds from '../../fbcreds'
+import PickerExercise from '../components/picker'
+import fbcreds from '../../fbcreds';
 
 import Login from './login';
 import CreateWorkout from './createWorkout';
@@ -29,8 +29,13 @@ export default class account extends Component {
 		super(props);
 		this.state = {
 			loaded: false,
+			language: 'Choose an Exercise'
 			}
 	}
+updateLanguage = (lang) => {
+      this.setState({language: lang});
+      console.log(this.state.language)
+   }
 
 async componentWillMount() {
 try {
@@ -40,7 +45,7 @@ try {
     let user_data = JSON.parse(value);
             this.setState({
                 user: user_data,
-                loaded: true
+                loaded: true,
             });
   }
 } catch (error) {
@@ -54,19 +59,17 @@ try {
 			<View style={styles.container}>
 				<Header text="Account" loaded={this.state.loaded} />
 				<View style={styles.body}>
+				<PickerExample
+            language = {this.state.language}
+            updateLanguage = {this.updateLanguage}
+         />
 					{
 						this.state.user &&
 							<View style={styles.body}>
 								<View style={page_styles.email_container}>
 									<Text syle={page_styles.email_text}>{this.state.user.email}</Text>
 								</View>
-							 <Picker
-			            style={styles.picker}
-			            selectedValue={this.state.selected1}
-			            onValueChange={(exer) => console.log(exer)}>
-			            <Item label="hello" value="key0" />
-			            <Item label="world" value="key1" />
-          		</Picker>
+
 							<Button
 								text="Create Exercise"
 								onpress= {this.createWorkout.bind(this)}
@@ -107,7 +110,4 @@ try {
 		email_text: {
 			fontSize: 18
 		},
-		picker: {
-    width: 100,
-  },
 	})
