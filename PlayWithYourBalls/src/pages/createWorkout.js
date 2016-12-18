@@ -6,7 +6,9 @@ import {
 	Text,
 	View,
 	Image,
-	AsyncStorage
+	AsyncStorage,
+	TextInput,
+	TouchableHighlight
 } from 'react-native';
 
 import Button from '../components/button';
@@ -19,12 +21,14 @@ import Account from './account';
 import styles from '../styles/common-styles.js';
 
 import Firebase from 'firebase';
+import {rootRef} from '../../index.ios.js';
 
 export default class createWorkout extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			loaded: false,
+			exercise: '',
 		}
 	}
 	async componentWillMount() {
@@ -33,7 +37,6 @@ export default class createWorkout extends Component {
   		if (value !== null){
     		// We have data!!
     		let user_data = JSON.parse(value);
-    		console.log(this.state.user);
             this.setState({
                 user: user_data,
                 loaded: true
@@ -43,20 +46,43 @@ export default class createWorkout extends Component {
   			console.log("storage err", error)
 		} }
 
+		saveExercise() {
+			rootRef.ref('exercises/' + this.state.user.uid).push({
+				exercise: this.state.exercise,
+				date: Date.now()
+			}).then((data) => console.log(data))
+		}
+
+
+
 		render(){
 		return (
 			<View style={styles.container}>
 				<Header text="Create Workout" loaded={this.state.loaded} />
-				<View style={styles.body}>
+				<TouchableHighlight onPress={() => this.props.navigator.pop()}>
+          <Text>Back</Text>
+        </TouchableHighlight>
 					{
 						this.state.user &&
 							<View style={styles.body}>
 								<View style={page_styles.email_container}>
 									<Text syle={page_styles.email_text}>{this.state.user.email}</Text>
 								</View>
+									<TextInput
+										style={styles.textinput}
+										onChangeText={(text) => {
+											this.setState({exercise: text})}
+										}
+										value={this.state.exercise}
+										placeholder={"New Exercise"}
+									/>
+									<Button
+										text="Save"
+										onpress={this.saveExercise.bind(this)}
+										button_styles={styles.primary_button}
+										button_text_styles={styles.primary_button_text} />
 							</View>
 					}
-				</View>
 			</View>
 		);
 	}

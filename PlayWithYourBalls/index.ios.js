@@ -16,7 +16,7 @@ import Header from './src/components/header';
 
 import Firebase from 'firebase';
 
-// let app = new Firebase(`${fbcreds.databaseURL}`);
+
 
 import styles from './src/styles/common-styles.js';
 
@@ -28,7 +28,9 @@ const firebaseConfig = {
   messagingSenderId: fbcreds.messagingSenderId,
 };
 
-let app = Firebase.initializeApp(firebaseConfig);
+let firebaseApp = Firebase.initializeApp(firebaseConfig);
+export const rootRef = firebaseApp.database();
+
 class PlayWithYourBalls extends Component {
   constructor(props) {
     super(props);
