@@ -12,7 +12,7 @@ import {
 
 import Button from '../components/button';
 import Header from '../components/header';
-import PickerExercise from '../components/picker'
+import {ExPicker} from '../components/picker'
 import fbcreds from '../../fbcreds';
 
 import Login from './login';
@@ -21,6 +21,9 @@ import CreateWorkout from './createWorkout';
 import styles from '../styles/common-styles.js';
 
 import Firebase from 'firebase';
+import {rootRef} from '../../index.ios.js';
+
+
 
 
 
@@ -30,7 +33,7 @@ export default class account extends Component {
 		this.state = {
 			loaded: false,
 			language: 'Choose an Exercise',
-			exercise: ["Bench", "Squat"]
+
 			}
 	}
 updateLanguage = (lang) => {
@@ -46,12 +49,33 @@ try {
     let user_data = JSON.parse(value);
             this.setState({
                 user: user_data,
-                loaded: true,
+                exercise: null,
+                exArray: []
             });
   }
 } catch (error) {
   console.log("storage err", error)
-} }
+}
+try {
+     rootRef.ref('exercises/' + this.state.user.uid).once('value')
+        .then((data) => {
+          let exercises = data.val();
+          this.setState({
+            exercise: exercises,
+          })
+          Object.keys(exercises).map((key) => {
+		      let item = exercises[key]
+		      this.state.exArray.push(item.exercise)
+		    })
+          this.setState({
+          	loaded: true
+          })
+        })
+
+    } catch (error) {
+      console.log("Picker Error", error)
+    }
+}
 
 
 
@@ -60,18 +84,17 @@ try {
 			<View style={styles.container}>
 				<Header text="Account" loaded={this.state.loaded} />
 				<View style={styles.body}>
-				<PickerExample
-            language = {this.state.language}
-            updateLanguage = {this.updateLanguage}
-            exercise = {this.state.exercise}
-         />
+
 					{
 						this.state.user &&
 							<View style={styles.body}>
 								<View style={page_styles.email_container}>
 									<Text syle={page_styles.email_text}>{this.state.user.email}</Text>
 								</View>
-
+								<ExPicker
+									user={this.state.user}
+									ex={this.state.exArray}
+									updateLanguage = {this.updateLanguage} />
 							<Button
 								text="Create Exercise"
 								onpress= {this.createWorkout.bind(this)}
