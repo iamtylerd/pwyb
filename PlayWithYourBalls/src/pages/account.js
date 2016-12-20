@@ -29,7 +29,8 @@ export default class account extends Component {
 		super(props);
 		this.state = {
 			loaded: false,
-			language: 'Choose an Exercise'
+			language: 'Choose an Exercise',
+			exercise: ["Bench", "Squat"]
 			}
 	}
 updateLanguage = (lang) => {
@@ -62,6 +63,7 @@ try {
 				<PickerExample
             language = {this.state.language}
             updateLanguage = {this.updateLanguage}
+            exercise = {this.state.exercise}
          />
 					{
 						this.state.user &&
