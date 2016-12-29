@@ -7,7 +7,8 @@ import {
 	View,
 	Image,
 	AsyncStorage,
-	Item
+	Item,
+	TextInput
 } from 'react-native';
 
 import Button from '../components/button';
@@ -32,14 +33,18 @@ export default class account extends Component {
 		super(props);
 		this.state = {
 			loaded: false,
-			language: 'Choose an Exercise',
-
+			selectedExercise: 'Choose an Exercise',
+			reps: null,
+      weight: null
 			}
 	}
-updateLanguage = (lang) => {
-      this.setState({language: lang});
-      console.log(this.state.language)
-   }
+
+
+saveWorkout = () => {
+	console.log(this.state.selectedExercise)
+	console.log(this.state.reps)
+	console.log(this.state.weight)
+}
 
 async componentWillMount() {
 try {
@@ -94,7 +99,29 @@ try {
 								<ExPicker
 									user={this.state.user}
 									ex={this.state.exArray}
-									updateLanguage = {this.updateLanguage} />
+									updateExercise={this.updateExercise}
+									thisExercise={this.state.selectedExercise} />
+								<TextInput
+									style={styles.textinput}
+									onChangeText={(text) => {
+										this.setState({weight: text})}
+									}
+									value={this.state.weight}
+									placeholder={"Weight"}
+									keyboardType = "numeric" />
+								<TextInput
+									style={styles.textinput}
+									onChangeText={(text) => {
+										this.setState({reps: text})}
+									}
+									value={this.state.reps}
+									placeholder={"Reps"}
+									keyboardType="numeric" />
+								<Button
+									text="Save Workout"
+									onpress = {this.saveWorkout.bind(this)}
+									button_styles={styles.primary_button}
+									button_text_styles={styles.primary_button_text} />
 							<Button
 								text="Create Exercise"
 								onpress= {this.createWorkout.bind(this)}
@@ -134,5 +161,5 @@ try {
 		},
 		email_text: {
 			fontSize: 18
-		},
+		}
 	})
