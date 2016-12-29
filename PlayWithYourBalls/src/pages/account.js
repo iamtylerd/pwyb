@@ -38,12 +38,24 @@ export default class account extends Component {
       weight: null
 			}
 	}
-
+ updateExercise = (ex) => {
+    this.setState({selectedExercise: ex});
+ }
 
 saveWorkout = () => {
 	console.log(this.state.selectedExercise)
 	console.log(this.state.reps)
 	console.log(this.state.weight)
+	rootRef.ref('exercises/' + this.state.user.uid).child(this.state.selectedExercise).push({
+		weight: this.state.weight,
+		reps: this.state.reps,
+		date: Date.now()
+	}).then((data) => {
+		this.setState({
+			weight: null,
+			reps: null
+		})
+	})
 }
 
 async componentWillMount() {
@@ -62,15 +74,15 @@ try {
   console.log("storage err", error)
 }
 try {
-     rootRef.ref('exercises/' + this.state.user.uid).once('value')
+    await rootRef.ref('exercises/' + this.state.user.uid).once('value')
         .then((data) => {
+        	console.log(data.val())
           let exercises = data.val();
           this.setState({
             exercise: exercises,
           })
           Object.keys(exercises).map((key) => {
-		      let item = exercises[key]
-		      this.state.exArray.push(item.exercise)
+		      this.state.exArray.push(key)
 		    })
           this.setState({
           	loaded: true
@@ -81,7 +93,6 @@ try {
       console.log("Picker Error", error)
     }
 }
-
 
 
 	render(){

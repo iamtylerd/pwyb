@@ -14,13 +14,8 @@ export class ExPicker extends React.Component{
   constructor(props) {
     super(props);
     this.state = {
-      selectedExercise: this.props.thisExercise
+      updateExercise: this.props.thisExercise
       }
-  }
-
-
-  componentWillMount() {
-
   }
 
   render() {
@@ -28,9 +23,8 @@ export class ExPicker extends React.Component{
       return (<Text>...Loading</Text>)
     } else {
         return (
-          <Picker selectedValue = {this.state.selectedExercise} onValueChange = {(ex) => {
-            this.setState({selectedExercise: ex})
-          }} style={styles.picker}>
+          <Picker selectedValue = {this.props.thisExercise} onValueChange = {this.props.updateExercise}
+            style={styles.picker}>
              <Picker.Item label = "Choose an Exercise" value = "" />
              {this.props.ex.map((ex, i) => <Picker.Item label = {ex} value = {ex} key = {i} />)}
           </Picker>
