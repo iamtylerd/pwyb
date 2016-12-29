@@ -47,9 +47,8 @@ export default class createWorkout extends Component {
 		} }
 
 		saveExercise() {
-			rootRef.ref('exercises/' + this.state.user.uid).push({
-				exercise: this.state.exercise,
-				date: Date.now()
+			rootRef.ref('exercises/' + this.state.user.uid).child(this.state.exercise).push({
+				init: true
 			}).then((data) => console.log(data))
 		}
 
