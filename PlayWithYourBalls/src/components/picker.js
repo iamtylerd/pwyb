@@ -20,7 +20,7 @@ export class ExPicker extends React.Component{
 
   render() {
     if(this.props.ex.length === 0) {
-      return (<Text>...Loading</Text>)
+      return (<Text>Please wait or create exercise</Text>)
     } else {
         return (
           <Picker selectedValue = {this.props.thisExercise} onValueChange = {this.props.updateExercise}
