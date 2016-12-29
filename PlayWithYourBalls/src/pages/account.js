@@ -76,6 +76,11 @@ try {
 try {
     await rootRef.ref('exercises/' + this.state.user.uid).once('value')
         .then((data) => {
+        	if(data.val() === null) {
+        		return this.setState({
+        			loaded: true
+        		})
+        	}
         	console.log(data.val())
           let exercises = data.val();
           this.setState({

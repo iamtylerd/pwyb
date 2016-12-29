@@ -79,7 +79,6 @@ export default class signup extends Component {
 					/><TextInput
 						style={styles.textinput}
 						onChangeText={(text) => {
-							console.log(text)
 							this.setState({email: text})}
 						}
 						value={this.state.email}
@@ -95,7 +94,6 @@ export default class signup extends Component {
 					<Button
 						text="Signup"
 						onpress={() => {
-							console.log(this.state)
 							this.signup()}
 						}
 						button_styles={styles.primary_button}
