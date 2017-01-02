@@ -18,6 +18,7 @@ import fbcreds from '../../fbcreds';
 
 import Login from './login';
 import CreateWorkout from './createWorkout';
+import viewData from './data';
 
 import styles from '../styles/common-styles.js';
 
@@ -43,9 +44,6 @@ export default class account extends Component {
  }
 
 saveWorkout = () => {
-	console.log(this.state.selectedExercise)
-	console.log(this.state.reps)
-	console.log(this.state.weight)
 	rootRef.ref('exercises/' + this.state.user.uid).child(this.state.selectedExercise).push({
 		weight: this.state.weight,
 		reps: this.state.reps,
@@ -81,7 +79,6 @@ try {
         			loaded: true
         		})
         	}
-        	console.log(data.val())
           let exercises = data.val();
           this.setState({
             exercise: exercises,
@@ -144,6 +141,11 @@ try {
 								button_styles={styles.primary_button}
 								button_text_styles={styles.primary_button_text} />
 							<Button
+								text="View Data"
+								onpress= {this.goToData.bind(this)}
+								button_styles={styles.primary_button}
+								button_text_styles={styles.primary_button_text} />
+							<Button
 								text="Logout"
 								onpress={this.logout.bind(this)}
 								button_styles={styles.primary_button}
@@ -167,6 +169,11 @@ try {
 		createWorkout() {
 			this.props.navigator.push({
 				component: CreateWorkout
+			})
+		}
+		goToData() {
+			this.props.navigator.push({
+				component: viewData
 			})
 		}
 	}
